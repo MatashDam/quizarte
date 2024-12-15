@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Art Gallery</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        h1 {
+            margin: 20px 0 10px;
+            color: #333;
+        }
+
+        .controls {
+            margin-bottom: 20px;
+        }
+
+        .controls button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .controls button:hover {
+            background-color: #0056b3;
+        }
+
+        .gallery {
+            display: grid;
+            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            width: 90%;
+            max-width: 1200px;
+        }
+
+        .card {
+            perspective: 1000px;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            padding-top: 140%;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+            cursor: pointer;
+        }
+
+        .card:hover .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .card-front {
+            background-color: #fff;
+        }
+
+        .card-front img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-back {
+            background-color: #333;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            transform: rotateY(180deg);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .card-back h3 {
+            margin: 10px 0;
+        }
+
+        .card-back p {
+            margin: 0;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <h1>Quiz Arte by franci for lula💙</h1>
+        <button onclick="shuffleCards()">Mescola shake it shake it 🎲</button>
+    </div>
+    <div class="gallery" id="gallery"></div>
+
+    <script src="updated_full_artworks_array.js"></script>
+    <script>
+        // Seleziona la galleria
+        const gallery = document.getElementById('gallery');
+
+        // Funzione per generare le card
+        function generateCards(data) {
+            gallery.innerHTML = ''; // Pulisce la galleria
+            data.forEach(art => {
+                const card = document.createElement('div');
+                card.className = 'card';
+
+                card.innerHTML = `
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <img src="${art.image}" alt="${art.title}">
+                        </div>
+                        <div class="card-back">
+                            <h3>${art.title}</h3>
+                            <p>${art.author}</p>
+                        </div>
+                    </div>
+                `;
+                gallery.appendChild(card);
+            });
+        }
+
+        // Funzione per mescolare le card
+        function shuffleCards() {
+            const shuffledArtworks = [...artworks];
+            for (let i = shuffledArtworks.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffledArtworks[i], shuffledArtworks[j]] = [shuffledArtworks[j], shuffledArtworks[i]];
+            }
+            generateCards(shuffledArtworks);
+        }
+
+        // Genera le card iniziali
+        generateCards(artworks);
+    </script>
+</body>
+</html>
